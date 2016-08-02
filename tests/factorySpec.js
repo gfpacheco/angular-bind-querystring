@@ -7,11 +7,13 @@ describe('bindQuerystring.bindQuerystring', function() {
   var $location;
   var $rootScope;
   var bindQuerystring;
+  var scope;
 
   beforeEach(inject(function(_$location_, _$rootScope_, _bindQuerystring_) {
     $location = _$location_;
     $rootScope = _$rootScope_;
     bindQuerystring = _bindQuerystring_;
+    scope = $rootScope.$new();
   }));
 
   it('should define bindQuerystring factory', function() {
@@ -22,20 +24,17 @@ describe('bindQuerystring.bindQuerystring', function() {
     $location.search({
       foo: 'foo'
     });
-    var scope = $rootScope.$new();
     bindQuerystring(scope, 'foo');
     expect(scope.foo).to.equal('foo');
   });
 
   it('should pull data from scope to querystring', function() {
-    var scope = $rootScope.$new();
     scope.foo = 'foo';
     bindQuerystring(scope, 'foo');
     expect($location.search().foo).to.equal('foo');
   });
 
   it('should listen for changes in querystring and update scope', function() {
-    var scope = $rootScope.$new();
     bindQuerystring(scope, 'foo');
     $location.search({
       foo: 'foo'
@@ -45,7 +44,6 @@ describe('bindQuerystring.bindQuerystring', function() {
   });
 
   it('should listen for changes in scope and update querystring', function() {
-    var scope = $rootScope.$new();
     bindQuerystring(scope, 'foo');
     $rootScope.$digest();
     scope.foo = 'foo';
@@ -57,7 +55,6 @@ describe('bindQuerystring.bindQuerystring', function() {
     $location.search({
       foo: '123'
     });
-    var scope = $rootScope.$new();
     bindQuerystring(scope, 'foo', function(value) {
       return parseInt(value);
     });
@@ -65,7 +62,6 @@ describe('bindQuerystring.bindQuerystring', function() {
   });
 
   it('should format data before pulling from scope to querystring', function() {
-    var scope = $rootScope.$new();
     scope.foo = 123;
     bindQuerystring(scope, 'foo', null, function(value) {
       return '' + value;
