@@ -1,0 +1,44 @@
+{
+  "name": "angular-bind-querystring",
+  "version": "0.0.0",
+  "homepage": "https://github.com/gfpacheco/angular-bind-querystring",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/gfpacheco/angular-bind-querystring.git"
+  },
+  "description": "Two way binding between scope variables and URL querystring with default values",
+  "authors": [
+    {
+      "name": "Guilherme Pacheco",
+      "email": "guilherme.f.pacheco@gmail.com"
+    }
+  ],
+  "keywords": [
+    "angular",
+    "angularjs",
+    "bind",
+    "querystring",
+    "query string"
+  ],
+  "license": "MIT",
+  "main": [
+    "dist/angular-bind-querystring.js"
+  ],
+  "ignore": [
+    "src",
+    "test",
+    "gulpfile.js",
+    "karma-*.conf.js",
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "1.x"
+  },
+  "devDependencies": {
+    "angular-mocks": ">=1.2.0",
+    "angular": ">=1.2.0"
+  }
+}
