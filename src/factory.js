@@ -8,14 +8,27 @@
 
     function bindQuerystring($location) {
       return function(scope, property) {
-        var params = $location.search();
+        function fromQuerystringToScope() {
+          var params = $location.search();
 
-        if (property in params) {
-          scope[property] = params[property];
-        } else if (property in scope) {
-          params[property] = scope[property];
-          $location.search(params);
+          if (property in params) {
+            scope[property] = params[property];
+          }
         }
+
+        function fromScopeToQuerystring() {
+          var params = $location.search();
+
+          if (property in scope) {
+            params[property] = scope[property];
+            $location.search(params);
+          }
+        }
+
+        scope.$on('$locationChangeSuccess', fromQuerystringToScope);
+
+        fromQuerystringToScope();
+        fromScopeToQuerystring();
       };
     }
 
