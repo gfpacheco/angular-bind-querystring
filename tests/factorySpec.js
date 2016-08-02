@@ -27,4 +27,11 @@ describe('bindQuerystring.bindQuerystring', function() {
     expect(scope.foo).to.equal('foo');
   });
 
+  it('should pull data from scope to querystring', function() {
+    var scope = $rootScope.$new();
+    scope.foo = 'foo';
+    bindQuerystring(scope, 'foo');
+    expect($location.search().foo).to.equal('foo');
+  });
+
 });

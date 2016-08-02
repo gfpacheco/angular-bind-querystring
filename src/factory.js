@@ -12,6 +12,9 @@
 
         if (property in params) {
           scope[property] = params[property];
+        } else if (property in scope) {
+          params[property] = scope[property];
+          $location.search(params);
         }
       };
     }
