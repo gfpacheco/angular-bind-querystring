@@ -70,6 +70,18 @@ angular.module('yourModule').controller(function($scope, bindQuerystring) {
 });
 ```
 
+### Default value
+
+You can set a default value if the property does not exists in querystring or scope yet:
+
+```javascript
+angular.module('yourModule').controller(function($scope, bindQuerystring) {
+  bindQuerystring($scope, 'foo', {
+    default: 'foo'
+  });
+});
+```
+
 ## Contributing
 
 Any help is appreciated, feel free to open issues and submit pull requests.
