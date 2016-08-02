@@ -14,12 +14,14 @@
     bindQuerystring.$inject = ['$location'];
 
     function bindQuerystring($location) {
-      return function(scope, property) {
+      return function(scope, property, parser) {
+        parser = parser || identityFunction;
+
         function fromQuerystringToScope() {
           var params = $location.search();
 
           if (property in params) {
-            scope[property] = params[property];
+            scope[property] = parser(params[property]);
           }
         }
 
@@ -38,6 +40,10 @@
         fromQuerystringToScope();
         fromScopeToQuerystring();
       };
+    }
+
+    function identityFunction(value) {
+      return value;
     }
 
 })(angular);

@@ -53,4 +53,15 @@ describe('bindQuerystring.bindQuerystring', function() {
     expect($location.search().foo).to.equal('foo');
   });
 
+  it('should parse data before pulling from querystring to scope', function() {
+    $location.search({
+      foo: '123'
+    });
+    var scope = $rootScope.$new();
+    bindQuerystring(scope, 'foo', function(value) {
+      return parseInt(value);
+    });
+    expect(scope.foo).to.equal(123);
+  });
+
 });
