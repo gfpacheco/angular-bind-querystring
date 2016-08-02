@@ -29,21 +29,27 @@
         }
 
         function fromQuerystringToScope() {
-          var target = getTarget();
-          if (target) {
-            var params = $location.search();
-            if (property in params) {
-              target[property] = options.parser(params[property]);
+          var params = $location.search();
+          if (property in params) {
+            var value = options.parser(params[property]);
+            var target = getTarget();
+            if (target) {
+              target[property] = value;
+            } else {
+              options.default = value;
             }
           }
         }
 
         function fromScopeToQuerystring() {
+          var params = $location.search();
           var target = getTarget();
-          if (target && property in target) {
-            var params = $location.search();
-            params[property] = options.formatter(target[property]);
-            $location.search(params);
+          if (target) {
+            var value = options.formatter(target[property] || options.default);
+            if (value) {
+              params[property] = value;
+              $location.search(params);
+            }
           }
         }
 

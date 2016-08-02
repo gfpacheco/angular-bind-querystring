@@ -73,6 +73,13 @@ describe('bindQuerystring.bindQuerystring', function() {
     expect($location.search().foo).to.equal('123');
   });
 
+  it('should use default value if property does not exist in querystring or scope', function() {
+    bindQuerystring(scope, 'foo', {
+      default: 'foo'
+    });
+    expect($location.search().foo).to.equal('foo');
+  });
+
   it('should pull data from querystring to target when using dot-notated property', function() {
     scope.foo = {};
     $location.search({
@@ -133,6 +140,15 @@ describe('bindQuerystring.bindQuerystring', function() {
       }
     });
     expect($location.search().bar).to.equal('123');
+  });
+
+  it('should use default value if property does not exist in querystring or scope when using dot-notated property', function() {
+    scope.foo = {};
+    bindQuerystring(scope, 'foo.bar', {
+      default: 'bar'
+    });
+    $rootScope.$digest();
+    expect(scope.foo.bar).to.equal('bar');
   });
 
 });
