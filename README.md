@@ -40,6 +40,20 @@ angular.module('yourModule').controller(function($scope, bindQuerystring) {
 });
 ```
 
+You can also send a parser and a formatter function to handle the property serialization:
+
+```javascript
+angular.module('yourModule').controller(function($scope, bindQuerystring) {
+  bindQuerystring($scope, 'foo', function(value) {
+    // parse value from querystring to scope property
+    return parseInt(value);
+  }, function(value) {
+    // formats value from scope property to querystring
+    return '' + value;
+  });
+});
+```
+
 ## Contributing
 
 Any help is appreciated, feel free to open issues and submit pull requests.
