@@ -69,4 +69,62 @@ describe('bindQuerystring.bindQuerystring', function() {
     expect($location.search().foo).to.equal('123');
   });
 
+  it('should pull data from querystring to target when using dot-notated property', function() {
+    scope.foo = {};
+    $location.search({
+      bar: 'bar'
+    });
+    bindQuerystring(scope, 'foo.bar');
+    expect(scope.foo.bar).to.equal('bar');
+  });
+
+  it('should pull data from target to querystring when using dot-notated property', function() {
+    scope.foo = {
+      bar: 'bar'
+    };
+    bindQuerystring(scope, 'foo.bar');
+    expect($location.search().bar).to.equal('bar');
+  });
+
+  it('should listen for changes in querystring and update target when using dot-notated property', function() {
+    scope.foo = {};
+    bindQuerystring(scope, 'foo.bar');
+    $location.search({
+      bar: 'bar'
+    });
+    $rootScope.$digest();
+    expect(scope.foo.bar).to.equal('bar');
+  });
+
+  it('should listen for changes in target and update querystring when using dot-notated property', function() {
+    bindQuerystring(scope, 'foo.bar');
+    $rootScope.$digest();
+    scope.foo = {
+      bar: 'bar'
+    };
+    $rootScope.$digest();
+    expect($location.search().bar).to.equal('bar');
+  });
+
+  it('should parse data before pulling from querystring to target when using dot-notated property', function() {
+    scope.foo = {};
+    $location.search({
+      bar: '123'
+    });
+    bindQuerystring(scope, 'foo.bar', function(value) {
+      return parseInt(value);
+    });
+    expect(scope.foo.bar).to.equal(123);
+  });
+
+  it('should format data before pulling from target to querystring when using dot-notated property', function() {
+    scope.foo = {
+      bar: 123
+    };
+    bindQuerystring(scope, 'foo.bar', null, function(value) {
+      return '' + value;
+    });
+    expect($location.search().bar).to.equal('123');
+  });
+
 });

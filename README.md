@@ -40,7 +40,9 @@ angular.module('yourModule').controller(function($scope, bindQuerystring) {
 });
 ```
 
-You can also send a parser and a formatter function to handle the property serialization:
+### Parser and formatter
+
+You can send a parser and a formatter function to handle the property serialization:
 
 ```javascript
 angular.module('yourModule').controller(function($scope, bindQuerystring) {
@@ -51,6 +53,17 @@ angular.module('yourModule').controller(function($scope, bindQuerystring) {
     // formats value from scope property to querystring
     return '' + value;
   });
+});
+```
+
+### Nested property
+
+The bound property doesn't need to be at scope's root, you can use dot-notated property name:
+
+```javascript
+angular.module('yourModule').controller(function($scope, bindQuerystring) {
+  $scope.foo = {};
+  bindQuerystring($scope, 'foo.bar');
 });
 ```
 
