@@ -35,7 +35,9 @@ angular.module('yourModule', ['bindQuerystring']);
 ## Usage
 
 ```javascript
-// TODO
+angular.module('yourModule').controller(function($scope, bindQuerystring) {
+  bindQuerystring($scope, 'foo');
+});
 ```
 
 ## Contributing

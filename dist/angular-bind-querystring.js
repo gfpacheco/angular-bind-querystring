@@ -11,8 +11,16 @@
     .module('bindQuerystring')
     .factory('bindQuerystring', bindQuerystring);
 
-    function bindQuerystring() {
-      return true;
+    bindQuerystring.$inject = ['$location'];
+
+    function bindQuerystring($location) {
+      return function(scope, property) {
+        var params = $location.search();
+
+        if (property in params) {
+          scope[property] = params[property];
+        }
+      };
     }
 
 })(angular);
