@@ -64,4 +64,13 @@ describe('bindQuerystring.bindQuerystring', function() {
     expect(scope.foo).to.equal(123);
   });
 
+  it('should format data before pulling from scope to querystring', function() {
+    var scope = $rootScope.$new();
+    scope.foo = 123;
+    bindQuerystring(scope, 'foo', null, function(value) {
+      return '' + value;
+    });
+    expect($location.search().foo).to.equal('123');
+  });
+
 });

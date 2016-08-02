@@ -7,8 +7,9 @@
     bindQuerystring.$inject = ['$location'];
 
     function bindQuerystring($location) {
-      return function(scope, property, parser) {
+      return function(scope, property, parser, formatter) {
         parser = parser || identityFunction;
+        formatter = formatter || identityFunction;
 
         function fromQuerystringToScope() {
           var params = $location.search();
@@ -22,7 +23,7 @@
           var params = $location.search();
 
           if (property in scope) {
-            params[property] = scope[property];
+            params[property] = formatter(scope[property]);
             $location.search(params);
           }
         }
