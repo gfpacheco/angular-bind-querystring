@@ -4,53 +4,44 @@
     .module('bindQuerystring')
     .factory('bindQuerystring', bindQuerystring);
 
-    bindQuerystring.$inject = ['$location'];
+    bindQuerystring.$inject = ['$rootScope', '$location'];
 
-    function bindQuerystring($location) {
-      return function(scope, property, options) {
-        var propertyChain = property.split('.');
-        property = propertyChain.pop();
-
+    function bindQuerystring($rootScope, $location) {
+      return function(options) {
         options = options || {};
+
+        options.scope = options.scope || $rootScope;
         options.parser = options.parser || identityFunction;
         options.formatter = options.formatter || identityFunction;
 
-        function getTarget() {
-          return propertyChain.reduce(function(object, property) {
-            return object && object[property];
-          }, scope);
-        }
-
         function fromQuerystringToScope() {
           var params = $location.search();
-          if (property in params) {
-            var value = options.parser(params[property]);
-            var target = getTarget();
-            if (target) {
-              target[property] = value;
-            } else {
-              options.default = value;
+          options.properties.forEach(function(property) {
+            if (property in params) {
+              options.target[property] = options.parser(params[property], property);
             }
-          }
+          });
         }
 
         function fromScopeToQuerystring() {
           var params = $location.search();
-          var target = getTarget();
-          if (target) {
-            var value = options.formatter(target[property] || options.default);
-            if (value) {
-              params[property] = value;
-              $location.search(params);
+          options.properties.forEach(function(property) {
+            if (property in options.target) {
+              params[property] = options.formatter(options.target[property], property);
             }
-          }
+          });
+          $location.search(params);
         }
 
-        scope.$on('$locationChangeSuccess', fromQuerystringToScope);
-        scope.$watch(function() {
-          var target = getTarget();
-          return target && target[property];
-        }, fromScopeToQuerystring);
+        options.scope.$on('$locationChangeSuccess', fromQuerystringToScope);
+        if (options.target instanceof $rootScope.constructor) {
+          // target is an scope object
+          options.target.$watchGroup(options.properties, fromScopeToQuerystring, true);
+        } else {
+          options.scope.$watch(function() {
+            return options.target;
+          }, fromScopeToQuerystring, true);
+        }
 
         fromQuerystringToScope();
         fromScopeToQuerystring();

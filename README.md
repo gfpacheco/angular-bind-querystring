@@ -36,9 +36,16 @@ angular.module('yourModule', ['bindQuerystring']);
 
 ```javascript
 angular.module('yourModule').controller(function($scope, bindQuerystring) {
-  bindQuerystring($scope, 'foo');
+  var target = {};
+  bindQuerystring({
+    target: target,
+    properties: ['foo']
+  });
 });
 ```
+
+Then every change on URL querystring or the target object (given the selected properties) will be
+reflected in both.
 
 ### Parser and formatter
 
@@ -46,12 +53,15 @@ You can send a parser and/or a formatter function to handle the value serializat
 
 ```javascript
 angular.module('yourModule').controller(function($scope, bindQuerystring) {
-  bindQuerystring($scope, 'foo', {
-    parser: function(value) {
+  var target = {};
+  bindQuerystring({
+    target: target,
+    properties: ['foo'],
+    parser: function(value, property) {
       // parse value from querystring to scope property
       return parseInt(value);
     },
-    formatter: function(value) {
+    formatter: function(value, property) {
       // formats value from scope property to querystring
       return '' + value;
     }
@@ -59,28 +69,15 @@ angular.module('yourModule').controller(function($scope, bindQuerystring) {
 });
 ```
 
-### Nested property
+Parsers and formatters receive the actual value and the name of the property being transformed.
 
-The bound property doesn't need to be at scope's root, you can use dot-notated property name:
+### Options
 
-```javascript
-angular.module('yourModule').controller(function($scope, bindQuerystring) {
-  $scope.foo = {};
-  bindQuerystring($scope, 'foo.bar');
-});
-```
-
-### Default value
-
-You can set a default value if the property does not exists in querystring or scope yet:
-
-```javascript
-angular.module('yourModule').controller(function($scope, bindQuerystring) {
-  bindQuerystring($scope, 'foo', {
-    default: 'foo'
-  });
-});
-```
+- `target` - the object that holds the properties being bound
+- `properties` - an array of strings naming the properties that should be bound
+- `scope` _(optional)_ - isn't required, but **prevents memory leak over time**
+- `parser` _(optional)_ - function that converts the URL query string to your model
+- `formatter` _(optional)_ - function that converts your model to the URL query string
 
 ## Contributing
 
