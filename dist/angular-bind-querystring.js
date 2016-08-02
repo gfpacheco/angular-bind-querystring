@@ -14,12 +14,13 @@
     bindQuerystring.$inject = ['$location'];
 
     function bindQuerystring($location) {
-      return function(scope, property, parser, formatter) {
+      return function(scope, property, options) {
         var propertyChain = property.split('.');
         property = propertyChain.pop();
 
-        parser = parser || identityFunction;
-        formatter = formatter || identityFunction;
+        options = options || {};
+        options.parser = options.parser || identityFunction;
+        options.formatter = options.formatter || identityFunction;
 
         function getTarget() {
           return propertyChain.reduce(function(object, property) {
@@ -32,7 +33,7 @@
           if (target) {
             var params = $location.search();
             if (property in params) {
-              target[property] = parser(params[property]);
+              target[property] = options.parser(params[property]);
             }
           }
         }
@@ -41,7 +42,7 @@
           var target = getTarget();
           if (target && property in target) {
             var params = $location.search();
-            params[property] = formatter(target[property]);
+            params[property] = options.formatter(target[property]);
             $location.search(params);
           }
         }

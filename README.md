@@ -42,16 +42,19 @@ angular.module('yourModule').controller(function($scope, bindQuerystring) {
 
 ### Parser and formatter
 
-You can send a parser and a formatter function to handle the property serialization:
+You can send a parser and/or a formatter function to handle the value serialization:
 
 ```javascript
 angular.module('yourModule').controller(function($scope, bindQuerystring) {
-  bindQuerystring($scope, 'foo', function(value) {
-    // parse value from querystring to scope property
-    return parseInt(value);
-  }, function(value) {
-    // formats value from scope property to querystring
-    return '' + value;
+  bindQuerystring($scope, 'foo', {
+    parser: function(value) {
+      // parse value from querystring to scope property
+      return parseInt(value);
+    },
+    formatter: function(value) {
+      // formats value from scope property to querystring
+      return '' + value;
+    }
   });
 });
 ```

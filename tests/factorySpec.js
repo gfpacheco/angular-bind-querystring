@@ -55,16 +55,20 @@ describe('bindQuerystring.bindQuerystring', function() {
     $location.search({
       foo: '123'
     });
-    bindQuerystring(scope, 'foo', function(value) {
-      return parseInt(value);
+    bindQuerystring(scope, 'foo', {
+      parser: function(value) {
+        return parseInt(value);
+      }
     });
     expect(scope.foo).to.equal(123);
   });
 
   it('should format data before pulling from scope to querystring', function() {
     scope.foo = 123;
-    bindQuerystring(scope, 'foo', null, function(value) {
-      return '' + value;
+    bindQuerystring(scope, 'foo', {
+      formatter: function(value) {
+        return '' + value;
+      }
     });
     expect($location.search().foo).to.equal('123');
   });
@@ -111,8 +115,10 @@ describe('bindQuerystring.bindQuerystring', function() {
     $location.search({
       bar: '123'
     });
-    bindQuerystring(scope, 'foo.bar', function(value) {
-      return parseInt(value);
+    bindQuerystring(scope, 'foo.bar', {
+      parser: function(value) {
+        return parseInt(value);
+      }
     });
     expect(scope.foo.bar).to.equal(123);
   });
@@ -121,8 +127,10 @@ describe('bindQuerystring.bindQuerystring', function() {
     scope.foo = {
       bar: 123
     };
-    bindQuerystring(scope, 'foo.bar', null, function(value) {
-      return '' + value;
+    bindQuerystring(scope, 'foo.bar', {
+      formatter: function(value) {
+        return '' + value;
+      }
     });
     expect($location.search().bar).to.equal('123');
   });
