@@ -44,4 +44,13 @@ describe('bindQuerystring.bindQuerystring', function() {
     expect(scope.foo).to.equal('foo');
   });
 
+  it('should listen for changes in scope and update querystring', function() {
+    var scope = $rootScope.$new();
+    bindQuerystring(scope, 'foo');
+    $rootScope.$digest();
+    scope.foo = 'foo';
+    $rootScope.$digest();
+    expect($location.search().foo).to.equal('foo');
+  });
+
 });

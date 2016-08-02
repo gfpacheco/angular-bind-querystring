@@ -26,6 +26,7 @@
         }
 
         scope.$on('$locationChangeSuccess', fromQuerystringToScope);
+        scope.$watch(property, fromScopeToQuerystring);
 
         fromQuerystringToScope();
         fromScopeToQuerystring();
