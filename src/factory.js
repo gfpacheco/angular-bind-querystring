@@ -39,7 +39,13 @@
           options.target.$watchGroup(options.properties, fromScopeToQuerystring, true);
         } else {
           options.scope.$watch(function() {
-            return options.target;
+            var watchTarget = {};
+            options.properties.forEach(function(property) {
+              if (property in options.target) {
+                watchTarget[property] = options.target[property];
+              }
+            });
+            return watchTarget;
           }, fromScopeToQuerystring, true);
         }
 
